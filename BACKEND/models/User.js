@@ -1,4 +1,3 @@
-const { types } = require("pg");
 const database = require("../config/db.js");
 const Sequelize = require("sequelize");
 
