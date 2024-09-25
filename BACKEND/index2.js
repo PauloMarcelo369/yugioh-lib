@@ -1,6 +1,7 @@
 const sequelize = require("./config/db.js");
 const User = require("./models/User.js");
 const Card = require("./models/Card.js");
+const Deck = require("./models/Deck.js");
 
 const start = async () => {
   try {
