@@ -13,6 +13,7 @@ const start = async () => {
 
     // Sincronizando os modelos com o banco de dados
     await sequelize.sync();
+
     console.log("Modelos sincronizados com sucesso.");
   } catch (error) {
     console.error("Erro ao conectar-se ao banco de dados:", error);
