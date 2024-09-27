@@ -7,14 +7,14 @@ const Deck = require("./models/Deck.js");
 const DeckCards = require("./models/DeckCards.js");
 const DeckRating = require("./models/DeckRating.js");
 const DeckComments = require("./models/DeckComments.js");
+
+const CardRouter = require("./routes/CardRouter.js");
+
 const app = express();
 const PORT = 3000;
 
 app.use(express.json());
-
-app.get("/", (req, res) => {
-  res.send("ola mundo!");
-});
+app.use("/", CardRouter);
 
 const start = async () => {
   try {
@@ -24,6 +24,7 @@ const start = async () => {
     await sequelize.sync();
     console.log("Modelos sincronizados com sucesso.");
     const CardCount = await Card.count();
+    console.log(CardCount);
 
     if (!CardCount) {
       async function populate_cards() {
