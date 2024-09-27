@@ -19,6 +19,6 @@ const DeckComments = database.define("deck_comments", {
   },
 });
 
-DeckComments.belongsTo(Deck, { foreignKey: "deck_id" });
-DeckComments.belongsTo(User, { foreignKey: "user_id" });
+DeckComments.belongsTo(Deck, { foreignKey: "deck_id", onDelete: "CASCADE" });
+DeckComments.belongsTo(User, { foreignKey: "user_id", onDelete: "CASCADE" });
 module.exports = DeckComments;

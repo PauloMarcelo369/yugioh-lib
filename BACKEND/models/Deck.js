@@ -21,5 +21,9 @@ const Deck = database.define("decks", {
   },
 });
 
-Deck.belongsTo(User, { foreignKey: "id_user", constraints: true });
+Deck.belongsTo(User, {
+  foreignKey: "id_user",
+  constraints: true,
+  onDelete: "CASCADE",
+});
 module.exports = Deck;

@@ -23,6 +23,6 @@ const DeckRating = database.define("deck_ratings", {
   },
 });
 
-DeckRating.belongsTo(Deck, { foreignKey: "deck_id" });
-DeckRating.belongsTo(User, { foreignKey: "user_id" });
+DeckRating.belongsTo(Deck, { foreignKey: "deck_id", onDelete: "CASCADE" });
+DeckRating.belongsTo(User, { foreignKey: "user_id", onDelete: "CASCADE" });
 module.exports = DeckRating;
