@@ -11,12 +11,13 @@ require("dotenv").config();
 
 const CardRouter = require("./routes/CardRouter.js");
 const AuthRouter = require("./routes/AuthRouter.js");
+const DeckRouter = require("./routes/DeckRouter.js");
 
 const app = express();
 
 app.use(express.json());
 
-app.use("/", CardRouter, AuthRouter);
+app.use("/", CardRouter, AuthRouter, DeckRouter);
 
 const start = async () => {
   try {

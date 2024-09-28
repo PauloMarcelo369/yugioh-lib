@@ -21,7 +21,7 @@ exports.createDeck = async (deckObject) => {
       name: newDeck.name,
       deck_description: newDeck.deck_description,
       is_public: newDeck.is_public,
-      cretedAt: newDeck.createdAt,
+      createdAt: newDeck.createdAt,
       updatedAt: newDeck.updatedAt,
     };
   } catch (error) {
@@ -62,6 +62,10 @@ exports.updateDeckInfo = async (deck_id, user_info, updatedDeckInfo) => {
     delete updatedDeckInfo.user_id;
 
     await Deck.update(updatedDeckInfo, { where: { id: deck_id } });
+    return {
+      id: deck_id,
+      ...updatedDeckInfo,
+    };
   } catch (error) {
     throw new Error(
       `erro ao tentar atualizar os dados do deck: ${error.message}`
