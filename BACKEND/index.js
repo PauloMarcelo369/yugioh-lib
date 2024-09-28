@@ -7,14 +7,16 @@ const Deck = require("./models/Deck.js");
 const DeckCards = require("./models/DeckCards.js");
 const DeckRating = require("./models/DeckRating.js");
 const DeckComments = require("./models/DeckComments.js");
+require("dotenv").config();
 
 const CardRouter = require("./routes/CardRouter.js");
+const AuthRouter = require("./routes/AuthRouter.js");
 
 const app = express();
-const PORT = 3000;
 
 app.use(express.json());
-app.use("/", CardRouter);
+
+app.use("/", CardRouter, AuthRouter);
 
 const start = async () => {
   try {
@@ -45,7 +47,7 @@ const start = async () => {
               level: apiCard.level != undefined ? apiCard.level : null,
               attribute:
                 apiCard.attribute != undefined ? apiCard.attribute : null,
-              img_url: apiCard.card_images[0].image_url,
+              img_url: apiCard.card_images[0].image_uSrl,
             };
             return Card.create(cardObject);
           });
@@ -64,6 +66,6 @@ const start = async () => {
 
 start();
 
-app.listen(PORT, () => {
-  console.log(`servidor rodando na porta: ${PORT}`);
+app.listen(process.env.PORT, () => {
+  console.log(`servidor rodando na porta: ${process.env.PORT}`);
 });
