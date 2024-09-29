@@ -1,6 +1,47 @@
 const Deck = require("../models/Deck.js");
 const Card = require("../models/Card.js");
-const { where } = require("sequelize");
+const User = require("../models/User.js");
+
+exports.getAllUserDecks = async (id) => {
+  try {
+    const userDecks = await Deck.findAll({ where: { id_user: id } });
+    if (!userDecks.length) {
+      return [];
+    }
+    const decksWithoutUserId = userDecks.map((deck) => {
+      const deckData = deck.toJSON();
+      delete deckData.id_user;
+      return deckData;
+    });
+    return decksWithoutUserId;
+  } catch (error) {
+    throw new Error(
+      "ocorreu um erro ao tentar resgatar os decks: " + error.message
+    );
+  }
+};
+
+exports.getAllPublicDecks = async () => {
+  try {
+    const publicDecks = await Deck.findAll({
+      where: { is_public: true },
+      include: { model: User, as: "user", attributes: ["username"] },
+    });
+    if (!publicDecks.length) {
+      return [];
+    }
+    const decksWithoutUserId = publicDecks.map((deck) => {
+      const deckData = deck.toJSON();
+      delete deckData.id_user;
+      return deckData;
+    });
+    return decksWithoutUserId;
+  } catch (error) {
+    throw new Error(
+      `Ocorreu um erro ao tentar resgatar os decks: ${error.message}`
+    );
+  }
+};
 
 exports.createDeck = async (deckObject) => {
   const { name, deck_description, is_public, user } = deckObject;
