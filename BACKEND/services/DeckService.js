@@ -21,6 +21,11 @@ exports.getAllUserDecks = async (id) => {
   }
 };
 
+// exports.getAllUserDeckCards = async (user, deckid) => {
+//   const {id} = user;
+
+// }
+
 exports.getAllPublicDecks = async () => {
   try {
     const publicDecks = await Deck.findAll({
@@ -46,9 +51,6 @@ exports.getAllPublicDecks = async () => {
 exports.createDeck = async (deckObject) => {
   const { name, deck_description, is_public, user } = deckObject;
 
-  if (!user || !user.id) {
-    throw new Error("Usuário não autenticado!");
-  }
   try {
     const definitiveDeck = {
       name: name,
