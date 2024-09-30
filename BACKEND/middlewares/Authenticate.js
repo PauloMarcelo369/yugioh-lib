@@ -11,7 +11,7 @@ const authenticate = async (req, res, next) => {
 
   jwt.verify(bearerToken, process.env.JWT_SECRET, (error, decoded) => {
     if (error) {
-      res.status(403).json({
+      return res.status(403).json({
         message: "erro: você não tem permissão para acessar essa rota!",
       });
     } else {
