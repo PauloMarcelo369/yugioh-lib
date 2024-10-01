@@ -127,13 +127,17 @@ exports.getPublicDeckCards = async (deck_id) => {
   try {
     const deck = await Deck.findOne({
       where: { is_public: true, id: deck_id },
-      include: { model: DeckCards, include: [{ model: Card }] },
+      include: {
+        model: DeckCards,
+        as: "deckCards",
+        include: [{ model: Card }],
+      },
     });
 
     if (!deck) {
       throw new Error("deck inexistente ou não é público");
     }
-    return deck;
+    return deck.deckCards;
   } catch (error) {
     throw new Error(
       `ocorreu um erro ao tentar resgatar os cards do deck: ${error.message}`
@@ -157,7 +161,7 @@ exports.getUserDeckCards = async (deck_id, user) => {
       throw new Error("O deck não diz respeito ao usuário ou não existe!");
     }
 
-    return deck;
+    return deck.deckCards;
   } catch (error) {
     throw new Error(
       `ocorreu um erro ao tentar resgatar as cards: ${error.message}`

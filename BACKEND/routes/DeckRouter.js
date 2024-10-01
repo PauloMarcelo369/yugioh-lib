@@ -18,6 +18,20 @@ router.get(
   authorization,
   DeckCardsController.getUserDeckCards
 );
+router.get(
+  "/deck/card/public_cards/:id",
+  DeckCardsController.getPublicDeckCards
+);
+router.put(
+  "/deck/card/:id",
+  authorization,
+  DeckCardsController.updateCardQuantity
+);
+router.delete(
+  "/deck/card/:id",
+  authorization,
+  DeckCardsController.removeCardFromDeck
+);
 router.post("/deck/card", authorization, DeckCardsController.insertCardInDeck);
 
 module.exports = router;

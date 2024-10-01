@@ -16,7 +16,7 @@ exports.insertCardInDeck = async (req, res) => {
 };
 
 exports.removeCardFromDeck = async (req, res) => {
-  const { cardId } = req.params;
+  const cardId = req.params.id;
   const user = req.user;
 
   try {
@@ -28,13 +28,16 @@ exports.removeCardFromDeck = async (req, res) => {
 };
 
 exports.updateCardQuantity = async (req, res) => {
-  const { cardId } = req.params;
+  const id = req.params.id;
   const { quantity } = req.body;
   const user = req.user;
 
   try {
+    if (!user) {
+      return res.status(404).json({ message: "usuário não existe!" });
+    }
     const updatedCard = await DeckCardService.updateCardQuantity(
-      cardId,
+      id,
       user,
       quantity
     );
@@ -61,7 +64,7 @@ exports.getUserDeckCards = async (req, res) => {
 exports.getPublicDeckCards = async (req, res) => {
   const deckId = req.params.id;
   try {
-    const deck = await DeckCardService.getUserDeckCards(deckId);
+    const deck = await DeckCardService.getPublicDeckCards(deckId);
     res.status(200).json(deck);
   } catch (error) {
     res.status(404).json({ message: error.message });
