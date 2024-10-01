@@ -131,7 +131,7 @@ exports.getPublicDeckCards = async (deck_id) => {
     });
 
     if (!deck) {
-      throw new Error("deck inexistente");
+      throw new Error("deck inexistente ou não é público");
     }
     return deck;
   } catch (error) {
