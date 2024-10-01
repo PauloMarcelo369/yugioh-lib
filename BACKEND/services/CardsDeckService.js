@@ -6,7 +6,7 @@ const Deck = require("../models/Deck.js");
 const MAX_TOTAL_CARDS = 60;
 const MAX_CARD_QUANTITY = 3;
 
-exports.addCardToDeck = async (deckId, cardId, quantity, user) => {
+exports.addCardToDeck = async (deckId, cardId, user, quantity = 1) => {
   const { id, role } = user;
   try {
     const deck = await Deck.findByPk(deckId);
@@ -16,7 +16,8 @@ exports.addCardToDeck = async (deckId, cardId, quantity, user) => {
       throw new Error("O deck ou o card não existe");
     }
 
-    if (deck.user_id !== id) {
+    if (deck.id_user !== id) {
+      console.log(deck.id_user, id);
       throw new Error(
         "O usuário não tem permissão de adicionar o card no deck!"
       );
@@ -31,7 +32,7 @@ exports.addCardToDeck = async (deckId, cardId, quantity, user) => {
     }
 
     const cardExists = await DeckCards.findOne({
-      where: { id_deck: deck.id, id_card: card.id },
+      where: { deck_id: deck.id, card_id: card.id },
     });
 
     if (cardExists) {
@@ -59,8 +60,8 @@ exports.addCardToDeck = async (deckId, cardId, quantity, user) => {
       throw new Error(`O tipo da carta não é válido para o deck!`);
     }
     const newCardDeck = await DeckCards.create({
-      id_deck: deckId,
-      id_card: cardId,
+      deck_id: deckId,
+      card_id: cardId,
       quantity,
     });
 
@@ -141,11 +142,15 @@ exports.getPublicDeckCards = async (deck_id) => {
 };
 
 exports.getUserDeckCards = async (deck_id, user) => {
-  const { userId, role } = user;
+  const { id, role } = user;
   try {
     const deck = await Deck.findOne({
-      where: { id: deck_id, user_id: userId },
-      include: { model: DeckCards, include: [{ model: Card }] },
+      where: { id: deck_id, id_user: id },
+      include: {
+        model: DeckCards,
+        as: "deckCards",
+        include: [{ model: Card }],
+      },
     });
 
     if (!deck) {

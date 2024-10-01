@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const DeckController = require("../controllers/DeckController.js");
+const DeckCardsController = require("../controllers/DeckCardController.js");
 const authorization = require("../middlewares/Authenticate.js");
 
 router.post("/deck", authorization, DeckController.createDeck);
@@ -11,5 +12,12 @@ router.put(
   authorization,
   DeckController.updateDeckInfo
 );
+
+router.get(
+  "/deck/card/:id",
+  authorization,
+  DeckCardsController.getUserDeckCards
+);
+router.post("/deck/card", authorization, DeckCardsController.insertCardInDeck);
 
 module.exports = router;

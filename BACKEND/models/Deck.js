@@ -1,6 +1,7 @@
 const database = require("../config/db.js");
 const Sequelize = require("sequelize");
 const User = require("./User.js");
+const DeckCards = require("../models/DeckCards.js");
 
 const Deck = database.define("decks", {
   id: {
@@ -21,9 +22,4 @@ const Deck = database.define("decks", {
   },
 });
 
-Deck.belongsTo(User, {
-  foreignKey: "id_user",
-  constraints: true,
-  onDelete: "CASCADE",
-});
 module.exports = Deck;

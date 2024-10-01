@@ -9,6 +9,7 @@ const DeckRating = require("./models/DeckRating.js");
 const DeckComments = require("./models/DeckComments.js");
 const extraDeckCards = require("./models/ExtraDeckCards.js");
 require("dotenv").config();
+require("./models/Associations.js");
 
 const CardRouter = require("./routes/CardRouter.js");
 const AuthRouter = require("./routes/AuthRouter.js");

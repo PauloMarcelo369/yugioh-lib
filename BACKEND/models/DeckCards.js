@@ -16,15 +16,4 @@ const DeckCards = database.define("deck_cards", {
   },
 });
 
-DeckCards.belongsTo(Deck, {
-  foreignKey: "deck_id",
-  constraints: true,
-  onDelete: "CASCADE",
-});
-DeckCards.belongsTo(Card, {
-  foreignKey: "card_id",
-  constraints: true,
-  onDelete: "CASCADE",
-});
-
 module.exports = DeckCards;
