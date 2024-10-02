@@ -13,10 +13,6 @@ const DeckComments = database.define("deck_comments", {
     type: Sequelize.TEXT,
     allowNull: false,
   },
-  created_at: {
-    type: Sequelize.DATE,
-    defaultValue: Sequelize.NOW,
-  },
 });
 
 DeckComments.belongsTo(Deck, { foreignKey: "deck_id", onDelete: "CASCADE" });

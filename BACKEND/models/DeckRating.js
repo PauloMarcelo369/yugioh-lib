@@ -17,10 +17,6 @@ const DeckRating = database.define("deck_ratings", {
       max: 5,
     },
   },
-  created_at: {
-    type: Sequelize.DATE,
-    defaultValue: Sequelize.NOW,
-  },
 });
 
 DeckRating.belongsTo(Deck, { foreignKey: "deck_id", onDelete: "CASCADE" });
