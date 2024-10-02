@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const DeckController = require("../controllers/DeckController.js");
 const DeckCardsController = require("../controllers/DeckCardController.js");
+const DeckCommentsController = require("../controllers/DeckCommentsController.js");
 const authorization = require("../middlewares/Authenticate.js");
 
 router.post("/deck", authorization, DeckController.createDeck);
@@ -33,5 +34,22 @@ router.delete(
   DeckCardsController.removeCardFromDeck
 );
 router.post("/deck/card", authorization, DeckCardsController.insertCardInDeck);
+
+router.get("/deck/comments/:id", DeckCommentsController.getDeckComments);
+router.post(
+  "/deck/comments/:id",
+  authorization,
+  DeckCommentsController.addComment
+);
+router.put(
+  "/deck/comments/:id",
+  authorization,
+  DeckCommentsController.updateComment
+);
+router.delete(
+  "/deck/comments/:id",
+  authorization,
+  DeckCommentsController.deleteComment
+);
 
 module.exports = router;
