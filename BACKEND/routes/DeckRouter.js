@@ -2,6 +2,7 @@ const router = require("express").Router();
 const DeckController = require("../controllers/DeckController.js");
 const DeckCardsController = require("../controllers/DeckCardController.js");
 const DeckCommentsController = require("../controllers/DeckCommentsController.js");
+const DeckRatingController = require("../controllers/DeckRatingsController.js");
 const authorization = require("../middlewares/Authenticate.js");
 
 router.post("/deck", authorization, DeckController.createDeck);
@@ -50,6 +51,22 @@ router.delete(
   "/deck/comments/:id",
   authorization,
   DeckCommentsController.deleteComment
+);
+
+router.post("/deck/:id/rating", authorization, DeckRatingController.addRating);
+
+router.get("/deck/:id/rating", DeckRatingController.getDeckRatings);
+
+router.put(
+  "/deck/rating/:id",
+  authorization,
+  DeckRatingController.updateRating
+);
+
+router.delete(
+  "/deck/rating/:id",
+  authorization,
+  DeckRatingController.deleteRating
 );
 
 module.exports = router;
