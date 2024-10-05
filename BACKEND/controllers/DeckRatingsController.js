@@ -28,7 +28,7 @@ exports.getDeckRatings = async (req, res) => {
 };
 
 exports.updateRating = async (req, res) => {
-  const ratingId = req.params.ratingId;
+  const ratingId = req.params.id;
   const user = req.user;
   const content = req.body;
 
@@ -49,7 +49,7 @@ exports.updateRating = async (req, res) => {
 };
 
 exports.deleteRating = async (req, res) => {
-  const ratingId = req.params.ratingId;
+  const ratingId = req.params.id;
   const user = req.user;
 
   try {

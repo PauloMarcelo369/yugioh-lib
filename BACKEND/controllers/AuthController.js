@@ -16,8 +16,22 @@ exports.userLogin = async (req, res) => {
   try {
     const credentials = { email, password };
     const responseObj = await AuthService.userLogin(credentials);
+    console.log("esse é o response: ", responseObj);
     res.status(200).json(responseObj);
   } catch (error) {
     res.status(401).json({ message: error.message });
+  }
+};
+
+exports.getLoggedUserInfo = async (req, res) => {
+  const user = req.user;
+  try {
+    if (!user) {
+      return res.status(401).json({ message: "o usuário não existe!" });
+    }
+    const responseObj = await AuthService.getLoggedUserInfo(user);
+    res.status(200).json(responseObj);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
   }
 };

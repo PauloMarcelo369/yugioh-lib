@@ -1,26 +1,41 @@
+const jwt = require("jsonwebtoken");
 const User = require("../models/User.js");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 
 exports.userRegister = async (user) => {
   const { username, email, password } = user;
-  const userExists = await User.findOne({ username });
-  const emailExists = await User.findOne({ email });
-  if (userExists || emailExists) {
-    throw new Error("Alguns campos já estão cadastrados no banco de dados!");
+
+  if (!username || !email || !password) {
+    throw new Error("Todos os campos são obrigatórios!");
   }
-  const HashedPassword = await bcrypt.hash(password, 10);
-  const newUser = await User.create({
-    username,
-    email,
-    password_hash: HashedPassword,
-  });
-  return {
-    id: newUser.id,
-    username: newUser.username,
-    email: newUser.email,
-    role: newUser.role,
-  };
+
+  const userExists = await User.findOne({ where: { username } });
+  const emailExists = await User.findOne({ where: { email } });
+  if (userExists) {
+    throw new Error("O nome de usuário já está em uso.");
+  }
+  if (emailExists) {
+    throw new Error("O email já está cadastrado.");
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  try {
+    const newUser = await User.create({
+      username,
+      email,
+      password_hash: hashedPassword,
+    });
+
+    return {
+      id: newUser.id,
+      username: newUser.username,
+      email: newUser.email,
+      role: newUser.role,
+    };
+  } catch (error) {
+    throw new Error("Erro ao criar o usuário. Tente novamente mais tarde.");
+  }
 };
 
 exports.userLogin = async (credentials) => {
@@ -42,9 +57,17 @@ exports.userLogin = async (credentials) => {
   );
 
   return {
-    username: user.username,
-    email: user.email,
-    role: user.role,
     token,
   };
+};
+
+exports.getLoggedUserInfo = async (user) => {
+  const userInfo = await User.findByPk(user.id);
+  if (!userInfo) {
+    throw new Error("Usuário inexistente!");
+  }
+
+  const { id, username, email, role } = userInfo.toJSON();
+  console.log("esse é o conteudo: " + username);
+  return { id, username, email, role };
 };

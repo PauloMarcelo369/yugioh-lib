@@ -10,12 +10,20 @@ const DeckComments = require("./models/DeckComments.js");
 const extraDeckCards = require("./models/ExtraDeckCards.js");
 require("dotenv").config();
 require("./models/Associations.js");
+const cors = require("cors");
+const app = express();
+
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN, // Usar a origem do arquivo .env
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 const CardRouter = require("./routes/CardRouter.js");
 const AuthRouter = require("./routes/AuthRouter.js");
 const DeckRouter = require("./routes/DeckRouter.js");
-
-const app = express();
 
 app.use(express.json());
 

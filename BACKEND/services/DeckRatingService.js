@@ -1,6 +1,7 @@
 const DeckRating = require("../models/DeckRating.js");
 const Deck = require("../models/Deck.js");
 const User = require("../models/User.js");
+const { Sequelize } = require("sequelize");
 
 exports.addRating = async (deck_id, content, user) => {
   const { id } = user;
@@ -44,8 +45,8 @@ exports.getDeckRatings = async (deckid) => {
   try {
     const ratings = await DeckRating.findAll({
       where: { deck_id: deckid, rating: { [Sequelize.Op.not]: null } },
-      attributes: ["rating", "createdAt"],
-      include: [{ model: User, attributes: "username" }],
+      attributes: ["id", "rating", "createdAt"],
+      include: [{ model: User, attributes: ["username"] }],
       order: [["createdAt", "DESC"]],
     });
 

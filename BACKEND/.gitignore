@@ -1,0 +1,37 @@
+# Ignore a pasta node_modules
+node_modules/
+
+# Ignore logs
+logs
+*.log
+npm-debug.log*
+
+# Ignore ambientes de desenvolvimento
+.DS_Store
+.env
+
+# Ignore arquivos de sistema do macOS
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Ignore pastas de builds e distribuição
+dist/
+build/
+out/
+public/build/
+public/dist/
+
+# Ignore arquivos de configuração do IDE
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Ignore arquivos de cache
+.cache/
+*.tmp
+
+# Ignore outros arquivos temporários
+*.bak
+*.swp
