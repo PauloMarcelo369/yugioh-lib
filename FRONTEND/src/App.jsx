@@ -4,6 +4,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { Header } from "./components/Header/index.jsx";
 import { AppRoutes } from "./routes/useRoutes.jsx";
 import { AuthProvider } from "./stores/userStore.jsx";
+import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "font-awesome/css/font-awesome.min.css";
 

@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
+import { useAuth } from "../../stores/userStore";
+// import { Swiper, SwiperSlide } from "swiper";
+// import { Navigation, Pagination } from "";
 
-export const HomePage = () => {
-  const { id } = useParams();
-  return <h1>YU-GI-OH! {id}</h1>;
-};
+export const HomePage = () => {};

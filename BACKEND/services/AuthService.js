@@ -40,7 +40,8 @@ exports.userRegister = async (user) => {
 
 exports.userLogin = async (credentials) => {
   const { email, password } = credentials;
-  const user = await User.findOne({ email });
+  console.log(email);
+  const user = await User.findOne({ where: { email } });
   if (!user) {
     throw new Error("Usuario inexistente!");
   }

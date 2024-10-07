@@ -5,14 +5,17 @@ import { api } from "../../api/api.js";
 import { Link } from "react-router-dom";
 import { AxiosError } from "axios";
 import MilleniumPuzzle from "../../assets/images/MillenniumPuzzleIcon.png";
+import { isAxiosError } from "axios";
 
 export const LoginPage = () => {
   const { Authenticate } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const loginUser = async () => {
     try {
+      console.log(email, password);
       const content = await api.post("/login", { email, password });
       const jwt = content.data.token;
 
@@ -21,16 +24,19 @@ export const LoginPage = () => {
           headers: { Authorization: `Bearer ${jwt}` },
         })
       ).data;
-      return userInfo;
+      console.log(userInfo);
+      Authenticate(userInfo, jwt);
     } catch (error) {
-      throw new Error(error.message);
+      if (isAxiosError(error)) {
+        setError(error.response.data.message);
+      }
     }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const result = await loginUser();
-    Authenticate(result);
+    setError("");
+    await loginUser();
   };
 
   return (
@@ -105,6 +111,8 @@ export const LoginPage = () => {
                     </a>
                   </div>
                 </div>
+
+                {error && <p>Houve um erro ao tentar logar: {error}</p>}
 
                 <div>
                   <p className="mb-0">

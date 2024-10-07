@@ -28,6 +28,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("username", newUser.username);
     localStorage.setItem("email", newUser.email);
     localStorage.setItem("role", newUser.role);
+    localStorage.setItem("jwt", token);
   };
 
   const logout = () => {
