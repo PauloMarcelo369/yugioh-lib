@@ -3,6 +3,7 @@ import { api } from "../../api/api";
 import { isAxiosError } from "axios";
 import { useState, useEffect, useRef } from "react";
 import styles from "./UserDecks.module.css";
+import { Link } from "react-router-dom";
 import DeckCase from "../../assets/images/DeckCase.webp";
 import { FaTimes, FaEdit } from "react-icons/fa";
 
@@ -74,7 +75,6 @@ export const UserDecks = () => {
         { headers: { Authorization: `Bearer ${jwt}` } }
       );
       const updatedDeck = response.data;
-      console.log(updatedDeck);
       const newList = decks.map((deck) =>
         deck.id === deckToEdit.id ? updatedDeck : deck
       );
@@ -173,7 +173,9 @@ export const UserDecks = () => {
         {decks.map((deck) => {
           return (
             <div className={styles.deck} key={deck.id}>
-              <img src={DeckCase} alt="deckCase" />
+              <Link to={`/deck/${deck.id}`}>
+                <img src={DeckCase} alt="deckCase" />
+              </Link>
               <div className={styles.deckInfo}>
                 <p>deck name: {deck.name}</p>
                 <p>description: {deck.deck_description}</p>

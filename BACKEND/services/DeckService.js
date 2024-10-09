@@ -21,6 +21,30 @@ exports.getAllUserDecks = async (id) => {
   }
 };
 
+exports.getUserDeck = async (deckId, userId) => {
+  try {
+    const userDeck = await Deck.findOne({
+      where: {
+        id: deckId,
+        id_user: userId,
+      },
+    });
+
+    if (!userDeck) {
+      throw new Error("O usuário não possui esse deck!");
+    }
+
+    const deckData = userDeck.toJSON();
+    delete deckData.id_user;
+
+    return deckData;
+  } catch (error) {
+    throw new Error(
+      "Ocorreu um erro ao tentar resgatar o deck: " + error.message
+    );
+  }
+};
+
 // exports.getAllUserDeckCards = async (user, deckid) => {
 //   const {id} = user;
 

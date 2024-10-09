@@ -15,6 +15,18 @@ exports.createDeck = async (req, res) => {
   }
 };
 
+exports.getUserDeckController = async (req, res) => {
+  const { id: deckId } = req.params;
+  const userId = req.user.id;
+
+  try {
+    const deck = await DeckService.getUserDeck(deckId, userId);
+    return res.status(200).json(deck);
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
+};
+
 exports.deleteDeck = async (req, res) => {
   const id_deck = req.params.id;
   try {

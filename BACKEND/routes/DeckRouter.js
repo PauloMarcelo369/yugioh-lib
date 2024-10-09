@@ -5,6 +5,11 @@ const DeckCommentsController = require("../controllers/DeckCommentsController.js
 const DeckRatingController = require("../controllers/DeckRatingsController.js");
 const authorization = require("../middlewares/Authenticate.js");
 
+router.get(
+  "/deck/get/:id",
+  authorization,
+  DeckController.getUserDeckController
+);
 router.post("/deck", authorization, DeckController.createDeck);
 router.get("/deck/public_decks", DeckController.getAllPublicDecks);
 router.get("/deck/user_decks", authorization, DeckController.getAllUserDecks);
