@@ -65,7 +65,12 @@ exports.addCardToDeck = async (deckId, cardId, user, quantity = 1) => {
       quantity,
     });
 
-    return newCardDeck.toJSON();
+    const createdCardDeck = await DeckCards.findOne({
+      where: { id: newCardDeck.id },
+      include: [{ model: Card }],
+    });
+
+    return createdCardDeck.toJSON();
   } catch (error) {
     throw new Error(
       `Ocorreu um erro ao tentar adicionar o deck: ${error.message}`

@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import { CardDetaily } from "../../containers/CardDetaily";
 import { DeckFilter } from "../../containers/DeckFilter";
+import {  CardDetaily  } from "../../containers/CardDetaily";
 import { DeckViewer } from "../../containers/DeckViewer";
 import styles from "./styles.module.css";
 import { api } from "../../api/api";
@@ -14,7 +14,9 @@ export const Deck = () => {
   const { id } = useParams();
   const { jwt } = useAuth();
   const [deck, setDeck] = useState(null);
-  const [error, setError] = useState();
+  const [addCard, setAddCard] = useState(null);
+  const [removedCard, setRemovedCard] = useState(null);
+  const [error, setError] = useState("");
 
   const getDeck = async () => {
     try {
@@ -48,10 +50,10 @@ export const Deck = () => {
         <CardDetaily />
       </div>
       <div className={styles.viewerContainer}>
-        <DeckViewer />
+        <DeckViewer deckId={id} addCard={addCard} removedCard={removedCard} />
       </div>
       <div className={styles.filterContainer}>
-        <DeckFilter />
+        <DeckFilter setAddCard={setAddCard} setRemovedCard={setRemovedCard} />
       </div>
     </div>
   );

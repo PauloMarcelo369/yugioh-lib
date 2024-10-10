@@ -7,7 +7,7 @@ import { api } from "../../api/api";
 import { isAxiosError } from "axios";
 import { MiniCard } from "../../components/miniCard";
 
-export const DeckFilter = ({ deckId }) => {
+export const DeckFilter = ({ deckId, setSelectedCard }) => {
   const [cards, setCards] = useState([]);
   const [error, setError] = useState("");
 
@@ -27,7 +27,7 @@ export const DeckFilter = ({ deckId }) => {
     }
   };
 
-  useEffect(() => {
+  const addCard = useEffect(() => {
     getCards();
   }, []);
   return (
