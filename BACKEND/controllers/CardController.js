@@ -1,8 +1,10 @@
 const CardService = require("../services/CardService.js");
 
 exports.getAllCards = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 40;
   try {
-    const cards = await CardService.getAllCards();
+    const cards = await CardService.getAllCards(page, limit);
     res.status(200).json(cards);
   } catch (error) {
     res.status(404).json({ message: error.message });

@@ -4,6 +4,7 @@ import { InputGroup, FormControl } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { api } from "../../api/api";
+import { useRef } from "react";
 import { isAxiosError } from "axios";
 import { MiniCard } from "../../components/miniCard";
 
@@ -15,13 +16,21 @@ export const DeckFilter = ({
 }) => {
   const [cards, setCards] = useState([]);
   const [error, setError] = useState("");
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const limit = 40;
+  const observer = useRef(null);
+  const lastCard = useRef(null);
 
   const getCards = async () => {
+    if (loading) return;
     try {
-      const response = await api.get("/cards");
+      setLoading(true);
+      const response = await api.get(`/cards?page=${page}&limit=${limit}`);
       const cardsResponse = response.data;
       console.log(cardsResponse);
-      setCards(cardsResponse);
+      setCards((prevCards) => [...prevCards, ...cardsResponse]);
+      setLoading(false);
     } catch (erro) {
       if (isAxiosError(error)) {
         setError(
@@ -29,12 +38,30 @@ export const DeckFilter = ({
             error.response.data.message
         );
       }
+      setLoading(false);
+    } finally {
+      setLoading(false);
     }
   };
 
   const addCard = useEffect(() => {
-    getCards();
-  }, []);
+    observer.current = new IntersectionObserver((entries) => {
+      const lastElement = entries[entries.length - 1];
+      if (lastElement.isIntersecting) {
+        getCards();
+        setPage((lastPage) => lastPage + 1);
+      }
+    });
+    if (lastCard.current) {
+      observer.current.observe(lastCard.current);
+    }
+    return () => {
+      if (lastCard.current && observer.current) {
+        observer.current.unobserve(lastCard.current);
+      }
+    };
+  }, [page]);
+
   return (
     <div className={styles.container}>
       <header>
@@ -62,45 +89,47 @@ export const DeckFilter = ({
           <button className="btn btn-success">search!</button>
         </form>
         <div className={styles.cardsContainer}>
-          {cards
-            .map((card) => {
-              return (
-                <div key={card.id} className={styles.cardContainer}>
-                  <MiniCard
-                    onClick={() => handleClickCard(card)}
-                    img_url={card.img_url}
-                    name={card.name}
-                    cardId={card.id}
-                  />
-                  <button
-                    className="btn btn-success"
-                    onClick={() => setAddCard(card)}
-                    style={{
-                      width: "100%",
-                      fontSize: "5px",
-                      padding: "5px 10px",
-                      marginTop: "5px",
-                    }}
-                  >
-                    Adicionar ao Deck
-                  </button>
-                  <br />
-                  <button
-                    className="btn btn-danger"
-                    onClick={() => setRemovedCard(card)}
-                    style={{
-                      width: "100%",
-                      fontSize: "5px",
-                      padding: "5px 10px",
-                      marginTop: "5px",
-                    }}
-                  >
-                    remover do Deck
-                  </button>
-                </div>
-              );
-            })
-            .slice(0, 40)}
+          {loading && <p>Carregando mais cartas...</p>}
+          {cards.map((card) => {
+            return (
+              <div key={card.id} className={styles.cardContainer}>
+                <MiniCard
+                  onClick={() => handleClickCard(card)}
+                  img_url={card.img_url}
+                  name={card.name}
+                  cardId={card.id}
+                />
+                <button
+                  className="btn btn-success"
+                  onClick={() => setAddCard(card)}
+                  style={{
+                    width: "100%",
+                    fontSize: "5px",
+                    padding: "5px 10px",
+                    marginTop: "5px",
+                  }}
+                >
+                  Adicionar ao Deck
+                </button>
+                <br />
+                <button
+                  className="btn btn-danger"
+                  onClick={() => setRemovedCard(card)}
+                  style={{
+                    width: "100%",
+                    fontSize: "5px",
+                    padding: "5px 10px",
+                    marginTop: "5px",
+                  }}
+                >
+                  remover do Deck
+                </button>
+              </div>
+            );
+          })}
+          <div ref={lastCard} style={{ color: "white" }}>
+            carregando o restante...
+          </div>
         </div>
       </div>
     </div>
