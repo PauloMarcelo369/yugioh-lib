@@ -69,6 +69,5 @@ exports.getLoggedUserInfo = async (user) => {
   }
 
   const { id, username, email, role } = userInfo.toJSON();
-  console.log("esse é o conteudo: " + username);
   return { id, username, email, role };
 };

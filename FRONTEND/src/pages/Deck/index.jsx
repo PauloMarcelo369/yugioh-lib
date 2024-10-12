@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { DeckFilter } from "../../containers/DeckFilter";
-import {  CardDetaily  } from "../../containers/CardDetaily";
+import { CardDetaily } from "../../containers/CardDetaily";
 import { DeckViewer } from "../../containers/DeckViewer";
 import styles from "./styles.module.css";
 import { api } from "../../api/api";
@@ -16,6 +16,7 @@ export const Deck = () => {
   const [deck, setDeck] = useState(null);
   const [addCard, setAddCard] = useState(null);
   const [removedCard, setRemovedCard] = useState(null);
+  const [currentCard, setCurrentCard] = useState(null);
   const [error, setError] = useState("");
 
   const getDeck = async () => {
@@ -36,6 +37,14 @@ export const Deck = () => {
     }
   };
 
+  const handleClickCard = (card) => {
+    setCurrentCard(card);
+  };
+
+  useEffect(() => {
+    console.log(`esse é meu current card: ${currentCard}`);
+  }, [currentCard]);
+
   useEffect(() => {
     getDeck();
   }, [id]);
@@ -47,13 +56,22 @@ export const Deck = () => {
   return (
     <div className={styles.deckContainer}>
       <div className={styles.detailyContainer}>
-        <CardDetaily />
+        <CardDetaily currentCard={currentCard} />
       </div>
       <div className={styles.viewerContainer}>
-        <DeckViewer deckId={id} addCard={addCard} removedCard={removedCard} />
+        <DeckViewer
+          deckId={id}
+          handleClickCard={handleClickCard}
+          addCard={addCard}
+          removedCard={removedCard}
+        />
       </div>
       <div className={styles.filterContainer}>
-        <DeckFilter setAddCard={setAddCard} setRemovedCard={setRemovedCard} />
+        <DeckFilter
+          setAddCard={setAddCard}
+          handleClickCard={handleClickCard}
+          setRemovedCard={setRemovedCard}
+        />
       </div>
     </div>
   );

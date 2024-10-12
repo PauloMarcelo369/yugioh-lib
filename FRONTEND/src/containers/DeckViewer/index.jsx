@@ -7,7 +7,7 @@ import { useAuth } from "../../stores/userStore";
 
 export const DeckViewer = (props) => {
   const { jwt } = useAuth();
-  const { deckId, removedCard, addCard } = props;
+  const { deckId, removedCard, addCard, handleClickCard } = props;
   const [cardsToDeck, setCardsToDeck] = useState([]);
   const [error, setError] = useState("");
 
@@ -48,7 +48,6 @@ export const DeckViewer = (props) => {
   };
 
   const updateCardQuantity = async ({ id, quantity }) => {
-    quantity++;
     try {
       const sendObj = { quantity };
       const response = await api.put(`/deck/card/${id}`, sendObj, {
@@ -81,10 +80,54 @@ export const DeckViewer = (props) => {
       if (!currentUpdatedCard) {
         createCardDeck();
       } else {
-        updateCardQuantity(currentUpdatedCard);
+        updateCardQuantity({
+          id: currentUpdatedCard.id,
+          quantity: currentUpdatedCard.quantity + 1,
+        });
       }
     }
   }, [addCard]);
+
+  const deleteCard = async ({ id }) => {
+    try {
+      const response = await api.delete(`/deck/card/${id}`, {
+        headers: { Authorization: `Bearer ${jwt}` },
+      });
+      const newCardList = cardsToDeck.filter((card) => card.id !== id);
+      setCardsToDeck(newCardList);
+    } catch (error) {
+      if (isAxiosError(error)) {
+        console.log(
+          `ocorreu um erro eo tentar deletar o deck: ${error.response.data.message}`
+        );
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (removedCard) {
+      let currentRemovedCard = null;
+      for (let i = 0; i < cardsToDeck.length; i++) {
+        const cardId = cardsToDeck[i].card.id;
+        if (cardId === removedCard.id) {
+          currentRemovedCard = cardsToDeck[i];
+          break;
+        }
+      }
+      if (currentRemovedCard) {
+        if (currentRemovedCard.quantity === 1) {
+          deleteCard(currentRemovedCard);
+        } else {
+          updateCardQuantity({
+            id: currentRemovedCard.id,
+            quantity: currentRemovedCard.quantity - 1,
+          });
+        }
+      } else {
+        console.log("card inexistente!");
+      }
+    }
+  }, [removedCard]);
 
   useEffect(() => {
     getAllDeckCards();
@@ -101,17 +144,20 @@ export const DeckViewer = (props) => {
       </header>
       <div className={styles.deckContainer}>
         {cardsToDeck
-          .map((cardDeck) => {
-            const { card } = cardDeck;
+          .flatMap((cardDeck) => {
+            const { card, quantity } = cardDeck;
 
-            return (
-              <MiniCard
-                img_url={card.img_url}
-                name={card.name}
-                cardId={card.id}
-              />
-            );
+            return Array(quantity).fill(card);
           })
+          .map((card, index) => (
+            <MiniCard
+              key={`${card.id}-${index}`}
+              onClick={() => handleClickCard(card)}
+              img_url={card.img_url}
+              name={card.name}
+              cardId={card.id}
+            />
+          ))
           .slice(0, 40)}
       </div>
       <div className={styles.extraDeckContainer}></div>

@@ -30,6 +30,8 @@
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
   height: 63%;
   display: flex;
+  align-content: baseline;
+  flex-wrap: wrap;
   gap: 7px;
   padding: 30px;
   overflow-y: auto;

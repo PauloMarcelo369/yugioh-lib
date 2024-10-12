@@ -7,7 +7,12 @@ import { api } from "../../api/api";
 import { isAxiosError } from "axios";
 import { MiniCard } from "../../components/miniCard";
 
-export const DeckFilter = ({ deckId, setSelectedCard }) => {
+export const DeckFilter = ({
+  deckId,
+  handleClickCard,
+  setAddCard,
+  setRemovedCard,
+}) => {
   const [cards, setCards] = useState([]);
   const [error, setError] = useState("");
 
@@ -60,11 +65,39 @@ export const DeckFilter = ({ deckId, setSelectedCard }) => {
           {cards
             .map((card) => {
               return (
-                <MiniCard
-                  img_url={card.img_url}
-                  name={card.name}
-                  cardId={card.id}
-                />
+                <div key={card.id} className={styles.cardContainer}>
+                  <MiniCard
+                    onClick={() => handleClickCard(card)}
+                    img_url={card.img_url}
+                    name={card.name}
+                    cardId={card.id}
+                  />
+                  <button
+                    className="btn btn-success"
+                    onClick={() => setAddCard(card)}
+                    style={{
+                      width: "100%",
+                      fontSize: "5px",
+                      padding: "5px 10px",
+                      marginTop: "5px",
+                    }}
+                  >
+                    Adicionar ao Deck
+                  </button>
+                  <br />
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => setRemovedCard(card)}
+                    style={{
+                      width: "100%",
+                      fontSize: "5px",
+                      padding: "5px 10px",
+                      marginTop: "5px",
+                    }}
+                  >
+                    remover do Deck
+                  </button>
+                </div>
               );
             })
             .slice(0, 40)}
